@@ -44,7 +44,7 @@ class Game extends Component {
     )
   }
 
-  selectNumber(index){
+  selectNumber = (index) => {
     this.setState((previousState) => ({selectedNumbers: [...previousState.selectedNumbers, index]}))
   }
 
@@ -54,7 +54,14 @@ class Game extends Component {
         <Text style={styles.target}>{this.target}</Text>
         <View style={styles.randomContainer}>
           { this.randomNumbers.map((randomNumber, index) =>
-            <RandomNumber key={index} selected={this.isNumberSelected(index)} randomNumber={randomNumber} key={index} />
+            <RandomNumber
+              key={index}
+              id={index}
+              isDisabled={this.isNumberSelected(index)}
+              randomNumber={randomNumber}
+              onPress={this.selectNumber}
+              key={index}
+            />
           )}
         </View>
       </View>
