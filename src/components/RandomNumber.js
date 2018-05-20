@@ -16,6 +16,7 @@ class RandomNumber extends Component {
   }
 
   handleSubmit = () => {
+    if(this.props.isDisabled) { return; }
     this.props.onPress(this.props.id)
   }
 
