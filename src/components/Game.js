@@ -15,12 +15,31 @@ class Game extends Component {
     this.target = this.getTarget();
     this.gameStatus = this.gameStatus.bind(this);
     this.state = {
-      selectedIds: []
+      selectedIds: [],
+      remainingSeconds: this.props.initialSeconds
     }
+  }
+
+  componentDidMount(){
+    this.intervalId = setInterval(() => {
+      this.setState((previousState) => {
+        return { remainingSeconds: previousState.remainingSeconds - 1};
+      }, () => {
+        if(this.state.remainingSeconds === 0){
+          clearInterval(this.intervalId);
+        }
+
+      });
+    }, 1000);
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.intervalId);
   }
 
   static propType = {
     randomNumberCount: PropTypes.number.isRequired,
+    initialSeconds: PropTypes.number.isRequired,
   }
 
   getTarget() {
@@ -51,6 +70,7 @@ class Game extends Component {
       return acc + this.randomNumbers[curr]
     }, 0)
 
+    if(this.state.remainingSeconds === 0) return "LOST";
     if(sumSelected < this.target) return "PLAYING";
     if(sumSelected === this.target) return "WON";
     if(sumSelected > this.target) return "LOST";
@@ -78,6 +98,7 @@ class Game extends Component {
             />
           )}
         </View>
+        <Text>{this.state.remainingSeconds}</Text>
       </View>
     );
   }
